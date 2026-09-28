@@ -2,10 +2,18 @@
 #include <input/processors.dtsi>
 #include <dt-bindings/zmk/input_transform.h>
 
+// トラックボールで切り替わるマウス用レイヤー（レイヤー1）
+// - 時間では戻らない（input-processors の <&zip_temp_layer 1 0> の 0）
+//   戻るときは、マウス用レイヤーに置いた「&to 0」のキー、またはL1キーを押す
+// - 最後にキーを押してから500msの間は、ボールが動いてもマウス用レイヤーにしない
+&zip_temp_layer {
+    require-prior-idle-ms = <500>;
+};
+
 &pointing_listener {
     input-processors =
         <&zip_xy_transform (INPUT_TRANSFORM_X_INVERT | INPUT_TRANSFORM_Y_INVERT)>,
-        <&zip_temp_layer 1 500>;
+        <&zip_temp_layer 1 0>;
 
     scroller {
         layers = <4>;
